@@ -1,14 +1,14 @@
-import {SafeAreaView} from 'react-native';
-import Cadastro from './src/screens/cadastro/cadastro';
+import {NavigationContainer} from '@react-navigation/native';
 import {NativeBaseProvider} from 'native-base';
-import Splash from './src/screens/splash/splash';
+import Routes from './src/routes/stack';
+
 const App = () => {
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <NavigationContainer>
       <NativeBaseProvider>
-        <Splash />
+        <Routes />
       </NativeBaseProvider>
-    </SafeAreaView>
+    </NavigationContainer>
   );
 };
 

@@ -2,7 +2,11 @@ import {View, Text} from 'react-native';
 import estilo from './estilo/estilo';
 import colors from 'res/colors';
 import {TouchableOpacity} from 'react-native';
-const Splash = () => {
+const Splash = ({navigation}) => {
+  const irParaHome = () => {
+    navigation.navigate('Cadastro');
+  };
+
   return (
     <View style={estilo.container}>
       <View style={estilo.detalhe}></View>
@@ -12,7 +16,7 @@ const Splash = () => {
           Vamos começar?
         </Text>
         <View style={estilo.containerbutton}>
-          <TouchableOpacity style={estilo.button}>
+          <TouchableOpacity style={estilo.button} onPress={irParaHome}>
             <Text
               style={{
                 color: colors.primary_background,
