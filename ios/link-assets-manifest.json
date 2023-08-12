@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/library/fonts/Bungee-Regular.ttf",
+      "sha1": "5229858062d1cc9c3b96abf7a23c4fca2a78efd5"
+    },
+    {
+      "path": "src/library/fonts/NotoSans-Light.ttf",
+      "sha1": "bc3efa7ddce821a085e92b2173dbeef728de3bd5"
+    },
+    {
+      "path": "src/library/fonts/NotoSans-Regular.ttf",
+      "sha1": "48a8a4666136b01990837565613f7b7911d0093f"
+    },
+    {
+      "path": "src/library/fonts/NotoSans-Thin.ttf",
+      "sha1": "a84a89d2bd907b77294a83e3382680d06e08291f"
+    }
+  ]
+}
