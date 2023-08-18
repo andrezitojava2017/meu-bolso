@@ -13,6 +13,7 @@ const estilo = StyleSheet.create({
   textBoaVindas: {
     fontFamily: 'Bungee-Regular',
     fontSize: 22,
+    color: colors.text.others
   },
   imagem: {
     width: 100,

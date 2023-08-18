@@ -15,6 +15,7 @@ const Cadastro = ({navigation}) => {
   const [aguardando, setAguardando] = useState(false);
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [uriPerfil, setUriPerfil] = useState('');
 
   const formatarTelefone = value => {
     let tel = mascaraTelefone(value);
@@ -42,7 +43,8 @@ const Cadastro = ({navigation}) => {
             5000,
             ToastAndroid.BOTTOM,
           );
-          navigation.navigate('Home');
+          console.log(nome, telefone, uriPerfil)
+         // navigation.navigate('Home');
         })
         .catch(error => {
           ToastAndroid.showWithGravity(
@@ -68,7 +70,7 @@ const Cadastro = ({navigation}) => {
       <View style={estilo.cabecalho}>
         <Text style={estilo.textBoaVindas}>SEJA BEM VINDO</Text>
         <View>
-          <Imagem/>
+          <Imagem set={setUriPerfil} get={uriPerfil}/>
           <Text style={{fontSize: 12, marginVertical: 12}}>
             Selecione uma foto
           </Text>
