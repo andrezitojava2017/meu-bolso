@@ -1,38 +1,65 @@
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ToastAndroid,
-} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, ToastAndroid} from 'react-native';
 import {
   checarPermissao,
   leituraExternaStorage,
 } from '../permicoes/leituraExterna';
+import {launchImageLibrary} from 'react-native-image-picker';
+import logo from '../assets/ico_user.png'
 
-const buscarFotoPerfil = async () => {
-  const rs = await checarPermissao();
+const Imagem = ({set, get}) => {
 
-  if (rs) {
-    console.log('Chamar função para selecionar a foto');
-  } else {
-    try {
-      await leituraExternaStorage();
-      buscarFotoPerfil();
-    } catch (error) {
-      ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
+  const selecionarFoto = async () => {
+    const options = {mediaType: 'photo'};
+    const result = await launchImageLibrary(options);
+
+    if (result.didCancel) {
+      return;
     }
-  }
-};
+    if (result.errorCode == 'camera_unavailable') {
+      throw new Error('Erro a tentar acessar camera');
+    }
 
-const Imagem = () => {
+    if (result.errorCode == 'permission') {
+      throw new Error('Não ha permissao para acessar camera/diretorios');
+    }
+
+    if (result.errorCode == 'others') {
+      throw new Error('Ocorreu um erro desconhecido!');
+    }
+
+    set(result.assets[0].uri);
+  };
+
+  const buscarFotoPerfil = async () => {
+    const rs = await checarPermissao();
+
+    if (rs) {
+      try {
+        const photo = await selecionarFoto();
+      } catch (error) {
+        ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
+      }
+    } else {
+      try {
+        await leituraExternaStorage();
+        buscarFotoPerfil();
+      } catch (error) {
+        ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
+      }
+    }
+  };
   return (
     <TouchableOpacity onPress={buscarFotoPerfil}>
-      <Image
-        style={estilo.imagem}
-        source={{
-          uri: 'https://avatars.githubusercontent.com/u/25111991?v=4',
-        }}
-      />
+      {get !== '' ? (
+        <Image
+          style={estilo.imagem}
+          source={{
+            uri: get,
+          }}
+        />
+      ) : (
+        <Image style={estilo.imagem} source={logo} />
+      )}
     </TouchableOpacity>
   );
 };
