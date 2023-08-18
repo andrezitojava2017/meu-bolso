@@ -2,6 +2,7 @@ import {View, Text} from 'react-native';
 import estilo from './estilo/estilo';
 import colors from 'res/colors';
 import {TouchableOpacity} from 'react-native';
+
 const Splash = ({navigation}) => {
   const irParaHome = () => {
     navigation.navigate('Cadastro');
