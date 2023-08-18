@@ -34,8 +34,22 @@ const Cadastro = ({navigation}) => {
 
     /**Salva dados na base de dados */
     try {
-      await criarTabelaUsuario();
-      await salvarNovoUsuario([nome, telefone]);
+      Promise.all(criarTabelaUsuario, salvarNovoUsuario(nome, telefone))
+        .then(resolve => {
+          ToastAndroid.showWithGravity(
+            'Isso ai! seus dados já estão cadastrados',
+            5000,
+            ToastAndroid.BOTTOM,
+          );
+        })
+        .catch(error => {
+          ToastAndroid.showWithGravity(
+            error.message,
+            5000,
+            ToastAndroid.BOTTOM,
+          );
+        });
+
       setAguardando(false);
     } catch (error) {
       ToastAndroid.showWithGravity(
