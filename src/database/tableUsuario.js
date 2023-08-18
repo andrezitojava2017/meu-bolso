@@ -3,16 +3,22 @@ import {conectarDataBase} from './db';
 export const criarTabelaUsuario = async () => {
   const db = conectarDataBase();
 
-  db.executeSql(
-    'CREATE TABLE IF NOT EXISTS usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, contato VARCHAR)',
-    [],
-    result => {
-      console.log('Table created successfully');
-    },
-    error => {
-      console.log('Create table error', error);
-    },
-  );
+  return new Promise((resolve, reject) => {
+    db.executeSql(
+      'CREATE TABLE IF NOT EXISTS usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, contato VARCHAR)',
+      [],
+      result => {
+        resolve(true);
+      },
+      error => {
+        console.log('Create table error', error);
+        reject(error);
+      },
+      () => {
+        db.close();
+      },
+    );
+  });
 };
 
 export const buscarUsuario = async () => {
@@ -46,17 +52,21 @@ export const salvarNovoUsuario = async data => {
 
   let sql = `insert into usuario (nome, contato) values (?,?)`;
 
-  db.executeSql(
-    sql,
-    data,
-    result => {
-      console.log('SUCESSO ');
-    },
-    error => {
-      console.log('Erro ao salvar usuario ', error);
-    },
-    () => {
-      db.close(); // Fechando a conexão após a recuperação das categorias
-    },
-  );
+  return new Promise((resolve, reject) => {
+    db.executeSql(
+      sql,
+      data,
+      result => {
+        console.log('SUCESSO ');
+        resolve('usuario inserido');
+      },
+      error => {
+        console.log('Erro ao salvar usuario ', error);
+        reject(error);
+      },
+      () => {
+        db.close(); // Fechando a conexão após a recuperação das categorias
+      },
+    );
+  });
 };
