@@ -41,6 +41,7 @@ const Cadastro = ({navigation}) => {
             5000,
             ToastAndroid.BOTTOM,
           );
+          navigation.navigate('Home');
         })
         .catch(error => {
           ToastAndroid.showWithGravity(
