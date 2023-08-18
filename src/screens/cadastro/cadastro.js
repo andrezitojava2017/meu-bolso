@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import estilo from './estilo/estilo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button, HStack, Input, VStack} from 'native-base';
@@ -9,6 +9,7 @@ import {
   salvarNovoUsuario,
 } from '../../database/tableUsuario';
 import {ToastAndroid} from 'react-native';
+import Imagem from '../../library/components/image'
 
 const Cadastro = ({navigation}) => {
   const [aguardando, setAguardando] = useState(false);
@@ -67,12 +68,7 @@ const Cadastro = ({navigation}) => {
       <View style={estilo.cabecalho}>
         <Text style={estilo.textBoaVindas}>SEJA BEM VINDO</Text>
         <View>
-          <Image
-            style={estilo.imagem}
-            source={{
-              uri: 'https://avatars.githubusercontent.com/u/25111991?v=4',
-            }}
-          />
+          <Imagem/>
           <Text style={{fontSize: 12, marginVertical: 12}}>
             Selecione uma foto
           </Text>
