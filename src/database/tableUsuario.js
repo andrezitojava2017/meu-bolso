@@ -1,18 +1,21 @@
 import {conectarDataBase} from './db';
 
 export const criarTabelaUsuario = async () => {
-  const db = conectarDataBase();
+  const db = await conectarDataBase();
 
-  return new Promise((resolve, reject) => {
-    db.executeSql(
-      'CREATE TABLE IF NOT EXISTS usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, contato VARCHAR)',
+  db.transaction(tx => {
+    tx.executeSql(
+      `CREATE TABLE IF NOT EXISTS usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, contato VARCHAR)`,
       [],
       result => {
-        resolve(true);
+        return true;
       },
       error => {
-        console.log('Create table error', error);
-        reject(error);
+        console.log(
+          'Ocorreu um erro na tentativa de criar a tabela USUARIO: ',
+          error,
+        );
+        throw error;
       },
       () => {
         db.close();
@@ -34,13 +37,18 @@ export const buscarUsuario = async () => {
         (tx, result) => {
           var linhas = result.rows;
           for (let i = 0; i < linhas.length; i++) {
+            //console.log(linhas.item(i));
             res.push(linhas.item(i));
           }
           resolve(res);
         },
         error => {
+          console.log('Não foi possivel buscar dados de usuario: ', error);
           reject(error);
-          console.log('Erro na sql ', error);
+          //throw error;
+        },
+        () => {
+          db.close();
         },
       );
     });
@@ -48,25 +56,27 @@ export const buscarUsuario = async () => {
 };
 
 export const salvarNovoUsuario = async data => {
-  const db = conectarDataBase();
+  const db = await conectarDataBase();
 
   let sql = `insert into usuario (nome, contato) values (?,?)`;
 
-  return new Promise((resolve, reject) => {
-    db.executeSql(
+  // return new Promise((resolve, reject) => {
+  await db.transaction(tx => {
+    tx.executeSql(
       sql,
       data,
       result => {
         console.log('SUCESSO ');
-        resolve('usuario inserido');
       },
       error => {
-        console.log('Erro ao salvar usuario ', error);
-        reject(error);
+        console.log('Não foi possivel inserir os dados do usuario: ', error);
+        throw error;
       },
       () => {
-        db.close(); // Fechando a conexão após a recuperação das categorias
+        db.close();
       },
     );
   });
+
+  // });
 };
