@@ -1,8 +1,31 @@
 import {Image, StyleSheet, TouchableOpacity, ToastAndroid} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import logo from '../assets/ico_user.png';
+import RNFS from 'react-native-fs';
 
 const Imagem = ({set, get}) => {
+  /**
+   * Função que ira tipar a imagem, para depois ser salva no storage
+   * @param {String} type tipo de imagem que esta sendo selecionada
+   * @returns {tipoSelec} tipoSelec
+   */
+  const tipoImagem = async type => {
+    const tipoSelec = type.split('/')[1];
+    return tipoSelec;
+  };
+
+  const copiarFotoPerfil = async () => {
+    const nomeImagem = `perfil.${await tipoImagem(get[0].type)}`;
+
+    const destino = `${RNFS.ExternalDirectoryPath}/${nomeImagem}`;
+    RNFS.copyFile(get[0].uri, destino)
+      .then(rs => {
+        return;
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
 
   const selecionarFoto = async () => {
     const options = {mediaType: 'photo'};
@@ -24,6 +47,18 @@ const Imagem = ({set, get}) => {
     }
 
     set(result.assets);
+    
+    try {
+      await copiarFotoPerfil();
+
+    } catch (error) {
+
+      ToastAndroid.showWithGravity(
+        `${error.message}`,
+        5000,
+        ToastAndroid.BOTTOM,
+      );
+    }
   };
 
   const buscarFotoPerfil = async () => {
