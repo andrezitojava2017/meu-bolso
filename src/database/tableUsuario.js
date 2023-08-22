@@ -29,7 +29,7 @@ export const buscarUsuario = async () => {
 
   let res = [];
   let sql = 'SELECT * FROM usuario';
-  return await new Promise((resolve, reject) => {
+
     db.transaction(tx => {
       tx.executeSql(
         sql,
@@ -52,7 +52,6 @@ export const buscarUsuario = async () => {
         },
       );
     });
-  });
 };
 
 export const salvarNovoUsuario = async data => {
