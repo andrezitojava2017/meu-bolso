@@ -16,7 +16,7 @@ const Cadastro = ({navigation}) => {
   const [aguardando, setAguardando] = useState(false);
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [uriPerfil, setUriPerfil] = useState('');
+  const [uriPerfil, setUriPerfil] = useState([]);
 
   const formatarTelefone = value => {
     let tel = mascaraTelefone(value);
@@ -40,12 +40,12 @@ const Cadastro = ({navigation}) => {
       await criarTabelaUsuario();
       await salvarNovoUsuario([nome, telefone]);
 
+      console.log(uriPerfil)
       ToastAndroid.showWithGravity(
         'Isso ai! seus dados já estão cadastrados',
         5000,
         ToastAndroid.BOTTOM,
       );
-      let rs = await buscarUsuario();
 
       // navigation.navigate('Home');
 

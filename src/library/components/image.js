@@ -1,10 +1,6 @@
 import {Image, StyleSheet, TouchableOpacity, ToastAndroid} from 'react-native';
-import {
-  checarPermissao,
-  leituraExternaStorage,
-} from '../permicoes/leituraExterna';
 import {launchImageLibrary} from 'react-native-image-picker';
-import logo from '../assets/ico_user.png'
+import logo from '../assets/ico_user.png';
 
 const Imagem = ({set, get}) => {
 
@@ -27,34 +23,24 @@ const Imagem = ({set, get}) => {
       throw new Error('Ocorreu um erro desconhecido!');
     }
 
-    set(result.assets[0].uri);
+    set(result.assets);
   };
 
   const buscarFotoPerfil = async () => {
-    const rs = await checarPermissao();
-
-    if (rs) {
-      try {
-        const photo = await selecionarFoto();
-      } catch (error) {
-        ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
-      }
-    } else {
-      try {
-        await leituraExternaStorage();
-        buscarFotoPerfil();
-      } catch (error) {
-        ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
-      }
+    try {
+      const photo = await selecionarFoto();
+    } catch (error) {
+      ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
     }
   };
+
   return (
     <TouchableOpacity onPress={buscarFotoPerfil}>
-      {get !== '' ? (
+      {get.length != 0 ? (
         <Image
           style={estilo.imagem}
           source={{
-            uri: get,
+            uri: get[0].uri,
           }}
         />
       ) : (
