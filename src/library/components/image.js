@@ -2,29 +2,47 @@ import {Image, StyleSheet, TouchableOpacity, ToastAndroid} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import logo from '../assets/ico_user.png';
 import RNFS from 'react-native-fs';
+import {useState} from 'react';
 
-const Imagem = ({set, get}) => {
+const Imagem = ({caminho}) => {
+  const [uriPerfil, setUriPerfil] = useState();
+
   /**
    * Função que ira tipar a imagem, para depois ser salva no storage
    * @param {String} type tipo de imagem que esta sendo selecionada
    * @returns {tipoSelec} tipoSelec
    */
-  const tipoImagem = async type => {
-    const tipoSelec = type.split('/')[1];
-    return tipoSelec;
+  const tipoImagem = async tipo => {
+
+    return new Promise((resolve, reject) => {
+      let tipoSelec = tipo.split('/')[1];
+      resolve(tipoSelec);
+
+    }).catch(error => {
+      reject(error);
+    });
   };
 
-  const copiarFotoPerfil = async () => {
-    const nomeImagem = `perfil.${await tipoImagem(get[0].type)}`;
+  const copiarFotoPerfil = async info => {
+    try {
+      const tipoImg = await tipoImagem(info.type);
+      const nomeImagem = `perfil.${tipoImg}`;
 
-    const destino = `${RNFS.ExternalDirectoryPath}/${nomeImagem}`;
-    RNFS.copyFile(get[0].uri, destino)
-      .then(rs => {
-        return;
-      })
-      .catch(error => {
-        throw error;
-      });
+      const destino = `${RNFS.ExternalDirectoryPath}/${nomeImagem}`;
+
+      RNFS.copyFile(info.uri, destino)
+        .then(rs => {
+          // aqui vamos setar, o state setCaminhoFoto() o caminho onde esta a foto do usuario
+          // para que possa ser salva na base somente o camiho
+          caminho(destino);
+          return;
+        })
+        .catch(error => {
+          throw error;
+        });
+    } catch (error) {
+      throw error;
+    }
   };
 
   const selecionarFoto = async () => {
@@ -46,10 +64,11 @@ const Imagem = ({set, get}) => {
       throw new Error('Ocorreu um erro desconhecido!');
     }
 
-    set(result.assets);
-    
+    setUriPerfil({...result.assets[0]});
+
     try {
-      await copiarFotoPerfil();
+
+      await copiarFotoPerfil(result.assets[0]);
 
     } catch (error) {
 
@@ -62,8 +81,10 @@ const Imagem = ({set, get}) => {
   };
 
   const buscarFotoPerfil = async () => {
+
     try {
       const photo = await selecionarFoto();
+
     } catch (error) {
       ToastAndroid.showWithGravity(error.message, 5000, ToastAndroid.CENTER);
     }
@@ -71,11 +92,11 @@ const Imagem = ({set, get}) => {
 
   return (
     <TouchableOpacity onPress={buscarFotoPerfil}>
-      {get.length != 0 ? (
+      {uriPerfil ? (
         <Image
           style={estilo.imagem}
           source={{
-            uri: get[0].uri,
+            uri: uriPerfil.uri,
           }}
         />
       ) : (
