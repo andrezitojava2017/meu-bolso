@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button, HStack, Input, VStack} from 'native-base';
 import {mascaraTelefone, validaCampos} from './funcoes/acoes';
 import {
-  buscarUsuario,
   criarTabelaUsuario,
   salvarNovoUsuario,
 } from '../../database/tableUsuario';
@@ -16,7 +15,7 @@ const Cadastro = ({navigation}) => {
   const [aguardando, setAguardando] = useState(false);
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [uriPerfil, setUriPerfil] = useState([]);
+  const [caminhoImagem, setCaminhoImagem] = useState('');
 
   const formatarTelefone = value => {
     let tel = mascaraTelefone(value);
@@ -38,16 +37,15 @@ const Cadastro = ({navigation}) => {
     /**Salva dados na base de dados */
     try {
       await criarTabelaUsuario();
-      await salvarNovoUsuario([nome, telefone]);
+      await salvarNovoUsuario([nome, telefone, caminhoImagem]);
 
-      console.log(uriPerfil)
       ToastAndroid.showWithGravity(
         'Isso ai! seus dados já estão cadastrados',
         5000,
         ToastAndroid.BOTTOM,
       );
 
-      // navigation.navigate('Home');
+      navigation.navigate('Home');
 
       setAguardando(false);
     } catch (error) {
@@ -65,7 +63,7 @@ const Cadastro = ({navigation}) => {
       <View style={estilo.cabecalho}>
         <Text style={estilo.textBoaVindas}>SEJA BEM VINDO</Text>
         <View>
-          <Imagem set={setUriPerfil} get={uriPerfil} />
+          <Imagem caminho={setCaminhoImagem} />
           <Text style={{fontSize: 12, marginVertical: 12}}>
             Selecione uma foto
           </Text>
