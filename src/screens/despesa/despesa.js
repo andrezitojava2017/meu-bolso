@@ -3,6 +3,7 @@ import {VStack} from 'native-base';
 import {Center, Text, Input, Box} from 'native-base';
 import colors from 'res/colors';
 import Categoria from '../../library/components/categoria/categoria';
+import Subcategoria from '../../library/components/subcategoria/subcategoria';
 
 const Despesa = () => {
   return (
@@ -35,6 +36,7 @@ const Despesa = () => {
         />
       </Box>
       <Categoria/>
+      <Subcategoria/>
     </VStack>
   );
 };

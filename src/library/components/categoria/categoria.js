@@ -20,6 +20,7 @@ const Categoria = () => {
         justifyContent={'center'}
         alignItems={'center'}
         flexWrap={'wrap'}>
+
         <Box padding={2}>
           <Icon name="calendar" size={24} color={colors.primary_background} />
           <Text fontSize={10}>Transporte</Text>
@@ -58,6 +59,7 @@ const Categoria = () => {
           <Text fontSize={10}>Mercado</Text>
         </Box>
       </Box>
+
     </Box>
   );
 };
