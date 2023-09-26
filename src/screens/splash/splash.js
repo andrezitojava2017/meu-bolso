@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native';
 
 const Splash = ({navigation}) => {
   const irParaHome = () => {
-    navigation.navigate('Cadastro');
+    navigation.navigate('Despesa');
   };
 
   return (
